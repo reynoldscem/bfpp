@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stdexcept>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -7,6 +6,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <unordered_map>
+#include <exception>
 
 const std::string VALID_INSTRUCTIONS = "+-<>[],.";
 const int TAPE_SIZE = 30000;
@@ -17,7 +17,7 @@ std::vector<char> load_program(std::string filename) {
   inputFile.open(filename);
 
   if (!inputFile.is_open() || !inputFile.good()) {
-    throw "File opening failed!";
+    throw std::runtime_error("File opening failed!");
   }
 
   std::vector<char> programVector;
@@ -131,8 +131,8 @@ int main(int argc, char** argv) {
   std::vector<char> programVector;
   try {
     programVector = load_program(argv[1]);
-  } catch (const char* message) {
-    std::cout << message << std::endl;
+  } catch (std::runtime_error& e) {
+    std::cout << e.what() << std::endl;
   }
 
   execute(programVector);
